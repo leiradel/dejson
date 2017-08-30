@@ -1,0 +1,22 @@
+struct Keyword { const char* name; int token; };
+//
+%%
+struct,      Token::kStruct
+signed,      Token::kSigned
+unsigned,    Token::kUnsigned
+char,        Token::kChar
+short,       Token::kShort
+int,         Token::kInt
+long,        Token::kLong
+int8_t,      Token::kInt8
+int16_t,     Token::kInt16
+int32_t,     Token::kInt32
+int64_t,     Token::kInt64
+uint8_t,     Token::kUint8
+uint16_t,    Token::kUint16
+uint32_t,    Token::kUint32
+uint64_t,    Token::kUint64
+float,       Token::kFloat
+double,      Token::kDouble
+bool,        Token::kBool
+string,      Token::kString

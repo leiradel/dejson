@@ -1,0 +1,89 @@
+//----------------------------------------------------------------------------
+
+struct GameID
+{
+  bool     Success;
+  unsigned GameID;
+};
+
+//----------------------------------------------------------------------------
+
+struct Login
+{
+  bool     Success;
+  string   User;
+  string   Token;
+  unsigned Score;
+  unsigned Messages;
+};
+
+//----------------------------------------------------------------------------
+
+struct Achievement
+{
+  unsigned ID;
+  string   MemAddr;
+  string   Title;
+  string   Description;
+  unsigned Points;
+  string   Author;
+  uint64_t Modified;
+  uint64_t Created;
+  string   BadgeName;
+  unsigned Flags;
+};
+
+struct Leaderboard
+{
+  unsigned ID;
+  string   Mem;
+  string   Format;
+  string   Title;
+  string   Description;
+};
+
+struct PatchData
+{
+  unsigned ID;
+  string   Title;
+  unsigned ConsoleID;
+  unsigned ForumTopicID;
+  unsigned Flags;
+  string   ImageIcon;
+  string   ImageTitle;
+  string   ImageIngame;
+  string   ImageBoxArt;
+  string   Publisher;
+  string   Developer;
+  string   Genre;
+  string   Released;
+  bool     IsFinal;
+  string   ConsoleName;
+  string*  RichPresencePatch;
+
+  Achievement Achievements[];
+  Leaderboard Leaderboards[];
+};
+
+struct Patch
+{
+  bool Success;
+  PatchData PatchData;
+};
+
+//----------------------------------------------------------------------------
+
+struct Unlocks
+{
+  bool     Success;
+  unsigned UserUnlocks[];
+  unsigned GameID;
+  bool     HardcoreMode;
+};
+
+//----------------------------------------------------------------------------
+
+struct PostActivity
+{
+  bool Success;
+};
