@@ -1,6 +1,6 @@
 # dejson
 
-Although JSON is based on a subset of the JavaScript language, my uses of it are always tied to a structured underlying data. Because of that, I've written **dejson** as a way to express JSON schema as C structures.
+Although JSON is based on a subset of the JavaScript language, my uses for it are always tied to structured data. Because of that, I've written **dejson** as a way to express JSON schema as C structures.
 
 These structures are compiled by the `dejson` compiler, and generate source code that can be added to a C project to deserialize JSON data. The generated source code is just the C structures plus data describing each structure and their fields; the deserializer is completely data-driven.
 
