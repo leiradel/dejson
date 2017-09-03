@@ -180,16 +180,30 @@ static size_t dejson_skip_string(dejson_state_t* state)
           digits[2] = aux[2];
           digits[3] = aux[3];
           digits[4] = 0;
-
+          aux += 4;
+          
           utf32 = strtoul(digits, NULL, 16);
 
-          if (utf32 >= 0x200000)
+          if (utf32 < 0x80U)
+          {
+          }
+          else if (utf32 < 0x800U)
+          {
+            length++;
+          }
+          else if (utf32 < 0x10000U)
+          {
+            length += 2;
+          }
+          else if (utf32 < 0x200000U)
+          {
+            length += 3;
+          }
+          else
           {
             longjmp(state->rollback, DEJSON_INVALID_ESCAPE);
           }
 
-          aux += 4;
-          length += 3;
           break;
         
         default:
@@ -201,7 +215,7 @@ static size_t dejson_skip_string(dejson_state_t* state)
   }
 
   state->json = aux + 1;
-  return length;
+  return length + 1;
 }
 
 static void dejson_skip_null(dejson_state_t* state)
@@ -424,21 +438,20 @@ static void dejson_parse_boolean(dejson_state_t* state, void* data)
 
 static void dejson_parse_string(dejson_state_t* state, void* data)
 {
+  const uint8_t* aux = state->json;
+  size_t length = dejson_skip_string(state);
+  uint8_t* str = (uint8_t*)dejson_alloc(state, length + 1, DEJSON_ALIGNOF(char));
+
   if (state->counting)
   {
-    dejson_skip_string(state);
     return;
   }
-
-  const uint8_t* aux = state->json;
 
   if (*aux++ != '"')
   {
     longjmp(state->rollback, DEJSON_INVALID_VALUE);
   }
 
-  size_t length = dejson_skip_string(state);
-  uint8_t* str = (uint8_t*)dejson_alloc(state, length + 1, DEJSON_ALIGNOF(char));
   ((dejson_string_t*)data)->chars = (char*)str;
   
   if (*aux !='"')
@@ -512,6 +525,8 @@ static void dejson_parse_string(dejson_state_t* state, void* data)
     }
     while (*aux != '"');
   }
+
+  *str = 0;
 }
 
 typedef void (*dejson_parser_t)(dejson_state_t*, void*);
