@@ -2,9 +2,9 @@
 
 Although JSON is based on a subset of the JavaScript language, my uses for it are always tied to structured data. Because of that, I've written **dejson** as a way to express JSON schema as C structures.
 
-These structures are compiled by the `dejson` compiler, and generate source code that can be added to a C project to deserialize JSON data. The generated source code is just the C structures plus data describing each structure and their fields; the deserializer is completely data-driven.
+These structures are compiled by the **dejson** compiler, and generate source code that can be added to a C project to deserialize JSON data. The generated source code is just the C structures plus data describing each structure and their fields; the deserializer is completely data-driven.
 
-The deserialization process doesn't error in case the schema and the data don't match. If a field in the schema doesn't have a corresponding key in the data, it's set to 0 (or false or NULL). If a key in the data doesn't have a corresponding field in the schema, it is disregarded.
+The deserialization process doesn't error in case the schema and the data don't match. If a field in the schema doesn't have a corresponding key in the data, it's set to `0` (or `false` or `NULL`). If a key in the data doesn't have a corresponding field in the schema, it is disregarded.
 
 ## Usage
 
@@ -15,4 +15,17 @@ The deserialization process doesn't error in case the schema and the data don't 
 1. Cast the buffer to a pointer to your main structure and access the fields at will.
 1. When the desrialized data is not needed anymore, free the buffer.
 
-Because of *dejson*'s current design, you have to define all structures for your JSON schema in the same `.dej` file.
+Because of **dejson**'s current design, you have to define all structures for your JSON schema in the same `.dej` file.
+
+## Compiler
+
+The **dejson** compiler is written with [ddlt](https://github.com/leiradel/ddlt/), so you'll need to build that first. Once built, add `ddlt` to your `PATH`, and run the **dejson** compiler with:
+
+```bash
+# Generate the header file
+# It'll have the same name as the input, but with the .h extension
+ddlt dejson.lua -h <input>
+
+# Generate the C source code
+ddlt dejson.lua -c <input>
+```
