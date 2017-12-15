@@ -1,11 +1,3 @@
-ifeq ($(shell uname -a),)
-	EXE=.exe
-else ifneq ($(findstring MINGW,$(shell uname -a)),)
-	EXE=.exe
-else
-	EXE=
-endif
-
 FLAGS=-O0 -g -Wall -I../include
 CFLAGS=$(FLAGS) -std=c99
 CXXFLAGS=$(FLAGS) -std=c++11
@@ -17,16 +9,16 @@ OBJS=RetroAchievements.o ../src/dejson.o Main.o
 %.o: %.c
 	gcc $(CFLAGS) -c $< -o $@
 
-all: test$(EXE)
+all: test
 
-test$(EXE): $(OBJS)
+test: $(OBJS)
 	g++ -o $@ $+
 
-RetroAchievements.c: RetroAchievements.dej
-	../compiler/dejson --output RetroAchievements $<
+RetroAchievements.c: RetroAchievements.dej RetroAchievements.h
+	../../ddlt/ddlt ../compiler/dejson.lua -c $<
 
 RetroAchievements.h: RetroAchievements.dej
-	../compiler/dejson --output RetroAchievements $<
+	../../ddlt/ddlt ../compiler/dejson.lua -h $<
 
 clean:
-	rm -f test$(EXE) $(OBJS) RetroAchievements.h RetroAchievements.c
+	rm -f test $(OBJS) RetroAchievements.h RetroAchievements.c
