@@ -236,7 +236,7 @@ parse = function(file)
 
     for i = 1, #str do
       h = h * 33 + str:byte(i, i)
-      h = h & 0xffffffff
+      h = bit32.band(h, 0xffffffff)
     end
 
     return h
