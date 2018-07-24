@@ -58,11 +58,13 @@ parse = function(file)
     end,
 
     next = function(self)
-      local la, err = self.lexer:next(self.la)
+      repeat
+        local la, err = self.lexer:next(self.la)
 
-      if not la then
-        self:error(self.la.line, err);
-      end
+        if not la then
+          self:error(self.la.line, err)
+        end
+      until la.token ~= '<linecomment>' and la.token ~= '<blockcomment>'
     end,
 
     match = function(self, token)
@@ -407,12 +409,12 @@ local function generate(options, template, out)
   file:close()
 end
 
-return function(args)
+local function main(args)
   local genc = false
   local genh = false
   local inputs = {}
 
-  for i = 2, #args do
+  for i = 1, #args do
     if args[i] == '-c' then
       genc = true
     elseif args[i] == '-h' then
@@ -450,3 +452,5 @@ return function(args)
     end
   end
 end
+
+main(arg)
